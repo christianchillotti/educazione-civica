@@ -47,8 +47,6 @@ void check_thresholds(float x, float y, float z)
   if (abs(z) > THRESHOLD_Z) {
     blue = 255;
   }
-
-  //setColor(red, green, blue);
 }
 
 void connect_to_wifi() {
