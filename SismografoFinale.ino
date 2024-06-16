@@ -6,6 +6,10 @@
 #include <WebServer.h>
 #include <WebSocketsServer.h>
 
+#define RED_LED 18
+#define GREEN_LED 17
+#define BLUE_LED 16
+
 #define THRESHOLD_X 0.25
 #define THRESHOLD_Y 0.25
 #define THRESHOLD_Z 0.25
@@ -30,23 +34,30 @@ LiquidCrystal_I2C lcd(LCD_ADDRESS, 16, 2);
 float x_0, y_0, z_0;
 bool first = true;
 
-const char* ssid = "rete";
-const char* password = "password";
+const char* ssid = "";
+const char* password = "";
 
 void check_thresholds(float x, float y, float z)
 {
-  byte red = 0, green = 0, blue = 0;
-
   // Check of thresholds
-  if (abs(x) > THRESHOLD_X) {
-    red = 255;
-  }
-  if (abs(y) > THRESHOLD_Y) {
-    green = 255;
-  }
-  if (abs(z) > THRESHOLD_Z) {
-    blue = 255;
-  }
+  if (abs(x) > THRESHOLD_X)
+    digitalWrite(RED_LED, HIGH);
+  else 
+    digitalWrite(RED_LED, LOW);
+  if (abs(y) > THRESHOLD_Y) 
+    digitalWrite(BLUE_LED, HIGH);
+  else
+    digitalWrite(BLUE_LED, LOW);
+  if (abs(z) > THRESHOLD_Z) 
+    digitalWrite(GREEN_LED, HIGH);
+  else
+    digitalWrite(GREEN_LED, LOW);
+}
+
+void init_LED(){
+  pinMode(RED_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(BLUE_LED, OUTPUT);
 }
 
 void connect_to_wifi() {
@@ -213,6 +224,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
 void setup() {
   Serial.begin(9600);
   delay(1000);
+  init_LED();
   init_mpu();
   init_lcd();
   connect_to_wifi();
