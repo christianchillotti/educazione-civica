@@ -109,7 +109,7 @@ const char webpage[] PROGMEM = R"rawliteral(
         function init() {
           Socket = new WebSocket('ws://' + window.location.hostname + ':81/');
 
-          Plotly.newPlot('plot', 
+          Plotly.newPlot('plot',  
             [
               {
                 x: [],
@@ -244,10 +244,9 @@ void loop() {
   int z_raw = 0; // read from sensor
 
   mpu_i2c.beginTransmission(MPU_ADDRESS);      // Start transfer
-  mpu_i2c.write(0x3B);                         // register 0x3B (ACCEL_XOUT_H), records data in queue
+  mpu_i2c.write(0x3B);                         // Tell the MPU that we want the data from register 0x3B (ACCEL_XOUT_H)
   mpu_i2c.endTransmission(false);              // Maintain connection
-  mpu_i2c.requestFrom(MPU_ADDRESS, 14, true);  // Request data to MPU
-
+  mpu_i2c.requestFrom(MPU_ADDRESS, 6, true);   // Request 6 registers from the MPU and after we close connection (third parameter)
   //Reads byte by byte
   x_raw = mpu_i2c.read() << 8 | mpu_i2c.read(); // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
   y_raw = mpu_i2c.read() << 8 | mpu_i2c.read(); // 0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
